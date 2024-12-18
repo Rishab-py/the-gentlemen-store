@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Gentlemen Store</title>
+    <link rel="stylesheet" href="{% static 'store/css/styles.css' %}">
+</head>
+<body>
+
+    <h1>Welcome to Gentlemen's Suits Store</h1>
+    <div class="product-list">
+        {% for product in products %}
+            <div class="product">
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <p>Price: ${{ product.price }}</p>
+
+                {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 300px;">
+        {% else %}
+            <p>No image available</p>
+        {% endif %}
+
+                <a href="{% url 'product_detail' product.id %}">View Product</a>
+            </div>
+            {% empty %}
+        <p>No products available.</p>
+        {% endfor %}
+    </div>
+
+    <h1>Products</h1>
+    <div>
+        {% for product in products %}
+        <div class="product">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 200px; height: auto;">
+            <h2>{{ product.name }}</h2>
+            <p>{{ product.description }}</p>
+            <p>Price: ${{ product.price }}</p>
+            <a href="{% url 'product_detail' product.id %}">View Product</a>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'cart' %}">View Cart</a>
+
+    <h1>Your Shopping Cart</h1>
+<div>
+    {% for item in cart.items.all %}
+    <div>
+        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 100px; height: auto;">
+        <h2>{{ item.product.name }}</h2>
+        <p>Quantity: {{ item.quantity }}</p>
+        <p>Total: ${{ item.total_price }}</p>
+        <a href="{% url 'remove_from_cart' item.product.id %}">Remove</a>
+    </div>
+    {% empty %}
+    <p>Your cart is empty.</p>
+    {% endfor %}
+</div>
+<a href="{% url 'home' %}">Continue Shopping</a>
+
+</body>
+</html>
